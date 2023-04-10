@@ -8,12 +8,13 @@ datasource db {
 }
 
 model Product {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  name       String   @unique
-  price      Int      @default(999)
-  createdAt  DateTime @default(now())
-  category   Category @relation(fields: [categoryId], references: [id])
-  categoryId String   @db.ObjectId
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  name         String   @unique
+  price        Int      @default(999)
+  createdAt    DateTime @default(now())
+  category     Category @relation(fields: [categoryId], references: [id])
+  categoryId   String   @db.ObjectId
+  productImage String 
 }
 
 model Category {

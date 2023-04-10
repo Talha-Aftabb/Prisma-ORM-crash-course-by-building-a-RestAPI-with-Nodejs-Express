@@ -11,9 +11,14 @@ app.use(express.json());
 app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 app.use(morgan("dev"));
+app.use("/uploads", express.static("uploads"));
 
 app.get("/", async (req, res, next) => {
-  res.send({ message: "Awesome it works 🐻" });
+  try {
+    res.send({ message: "Awesome it works 🐻" });
+  } catch (error) {
+    next(error);
+  }
 });
 
 app.use("/products", productRoute);
