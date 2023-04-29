@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const { PrismaClient } = require("@prisma/client");
 const upload = require("../products/multer");
-const cloudinary = require("..products/cloudinary");
+const cloudinary = require("../products/cloudinary");
 
 const prisma = new PrismaClient();
 
