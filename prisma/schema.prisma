@@ -14,11 +14,12 @@ model Product {
   createdAt    DateTime @default(now())
   category     Category @relation(fields: [categoryId], references: [id])
   categoryId   String   @db.ObjectId
-  productImage String 
+  productImage String[]
 }
 
 model Category {
-  id       String    @id @default(auto()) @map("_id") @db.ObjectId
-  name     String    @unique
-  products Product[]
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  name          String    @unique
+  categoryImage String
+  products      Product[]
 }

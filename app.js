@@ -2,6 +2,7 @@ const express = require("express");
 const createError = require("http-errors");
 const morgan = require("morgan");
 const cors = require("cors");
+const bodyParser = require("body-parser");
 const productRoute = require("./routes/products/product.route");
 const categoryRoute = require("./routes/category/category.route");
 require("dotenv").config();
@@ -10,6 +11,8 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 app.use(express.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 app.use(morgan("dev"));
 app.use("/uploads", express.static("uploads"));
 

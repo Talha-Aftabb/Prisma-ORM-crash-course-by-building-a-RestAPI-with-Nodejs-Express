@@ -1,40 +1,10 @@
-const path = require("path");
 const router = require("express").Router();
 const { PrismaClient } = require("@prisma/client");
-const multer = require("multer");
 const fs = require("fs");
+const upload = require("./multer");
+const cloudinary = require("./cloudinary");
 
 const prisma = new PrismaClient();
-
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "uploads/");
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname));
-  },
-});
-
-const fileFilter = (req, file, cb) => {
-  // reject a file
-  if (
-    file.mimetype === "image/jpeg" ||
-    file.mimetype === "image/png" ||
-    file.mimetype === "image/jpg"
-  ) {
-    cb(null, true);
-  } else {
-    cb(new Error("The file format must be jpeg, png, jpg"), false);
-  }
-};
-
-const upload = multer({
-  storage: storage,
-  limits: {
-    fieldSize: 1024 * 1024 * 5,
-  },
-  fileFilter: fileFilter,
-});
 
 //get all products
 router.get("/", async (req, res, next) => {
@@ -68,8 +38,20 @@ router.get("/:id", async (req, res, next) => {
 });
 
 //post products
-router.post("/", upload.single("productImage"), async (req, res, next) => {
-  const file = req.file;
+router.post("/", upload.array("productImage"), async (req, res, next) => {
+  //cloudinary
+  const uploader = async (path) =>
+    await cloudinary.uplaods(path, "productImages");
+
+  const urls = [];
+  //for loot to get the actual path
+  const files = req.files;
+  for (const file of files) {
+    const { path } = file;
+    const newPath = await uploader(path);
+    urls.push(newPath);
+  }
+
   const { name, price, categoryId } = req.body;
 
   try {
@@ -78,7 +60,7 @@ router.post("/", upload.single("productImage"), async (req, res, next) => {
         name,
         categoryId,
         price: Number(price),
-        productImage: file.path,
+        productImage: urls,
       },
     });
     res.status(200).json(products);
