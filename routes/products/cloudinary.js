@@ -14,10 +14,11 @@ exports.uplaods = (file, folder) => {
     cloudinary.uploader.upload(
       file,
       (result) => {
-        resolve({
-          url: result.url,
-          id: result.public_id,
-        });
+        // resolve({
+        //   url: result.url,
+        //   //   id: result.public_id,
+        // });
+        resolve({ url: result.url });
       },
       {
         resource_type: "auto",
