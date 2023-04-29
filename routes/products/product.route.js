@@ -55,7 +55,7 @@ router.post("/", upload.array("productImage"), async (req, res, next) => {
   const { name, price, categoryId } = req.body;
 
   try {
-    const products = await prisma.product.createMany({
+    await prisma.product.createMany({
       data: {
         name,
         categoryId,
@@ -63,7 +63,7 @@ router.post("/", upload.array("productImage"), async (req, res, next) => {
         productImage,
       },
     });
-    res.status(200).json(products);
+    res.status(200).json({ message: "Product created successfully!" });
   } catch (err) {
     next(err);
   }

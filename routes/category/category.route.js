@@ -31,14 +31,13 @@ router.post("/", upload.single("categoryImage"), async (req, res, next) => {
   const newPath = await uploader(path);
 
   try {
-    const category = await prisma.category.create({
+    await prisma.category.create({
       data: {
         name,
         categoryImage: newPath,
       },
     });
-    console.log("category", category);
-    res.status(200).json(category);
+    res.status(200).json({ message: "Category created successfully!" });
   } catch (err) {
     next(err);
   }
