@@ -44,6 +44,7 @@ router.post("/", upload.array("productImage"), async (req, res, next) => {
     await cloudinary.uplaods(path, "productImages");
 
   const productImage = [];
+
   //for loot to get the actual path
   const files = req.files;
   for (const file of files) {
