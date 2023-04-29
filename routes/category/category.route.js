@@ -25,22 +25,19 @@ router.post("/", upload.single("categoryImage"), async (req, res, next) => {
   const uploader = async (path) =>
     await cloudinary.uplaods(path, "categoryImage");
 
-  const categoryImage = [];
-
   //for loot to get the actual path
-  const files = req.files;
-  for (const file of files) {
-    const { path } = file;
-    const newPath = await uploader(path);
-    categoryImage.push(newPath);
-  }
+  const file = req.file;
+  const { path } = file;
+  const newPath = await uploader(path);
+
   try {
     const category = await prisma.category.create({
       data: {
         name,
-        categoryImage,
+        categoryImage: newPath,
       },
     });
+    console.log("category", category);
     res.status(200).json(category);
   } catch (err) {
     next(err);
