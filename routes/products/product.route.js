@@ -43,24 +43,23 @@ router.post("/", upload.array("productImage"), async (req, res, next) => {
   const uploader = async (path) =>
     await cloudinary.uplaods(path, "productImages");
 
-  const urls = [];
+  const productImage = [];
   //for loot to get the actual path
   const files = req.files;
   for (const file of files) {
     const { path } = file;
     const newPath = await uploader(path);
-    urls.push(newPath);
+    productImage.push(newPath);
   }
-
   const { name, price, categoryId } = req.body;
 
   try {
-    const products = await prisma.product.create({
+    const products = await prisma.product.createMany({
       data: {
         name,
         categoryId,
         price: Number(price),
-        productImage: urls,
+        productImage,
       },
     });
     res.status(200).json(products);
